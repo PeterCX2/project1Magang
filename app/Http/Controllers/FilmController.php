@@ -9,7 +9,7 @@ use App\Models\Film;
 class FilmController extends Controller
 {
     public function userIndex(){
-        $categories = Category::with('films')->paginate(3);
+        $categories = Category::with('films')->get();
         return view('user.index', compact('categories'));
     }
 

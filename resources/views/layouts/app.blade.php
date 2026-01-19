@@ -81,6 +81,13 @@
 			</p>
 		</div>
 
+        @if(Auth::user()->role == 'admin')
+            <div>
+                <a href="{{ route('admin.index') }}" class="px-4 py-2 font-medium text-white bg-purple-600 rounded-md hover:bg-purple-500 focus:outline-none focus:shadow-outline-purple active:bg-purple-600 transition duration-150 ease-in-out">Films</a>
+                <a href="{{ route('admin.category') }}" class="px-4 py-2 font-medium text-white bg-purple-600 rounded-md hover:bg-purple-500 focus:outline-none focus:shadow-outline-purple active:bg-purple-600 transition duration-150 ease-in-out">Categories</a>
+            </div>
+        @endif
+
 		<!-- RIGHT: PROFILE DROPDOWN -->
 		<div class="relative">
             
@@ -104,8 +111,6 @@
 		</div>
 
 	</header>
-
-
 
     <!-- MAIN CONTENT -->
     <main class="p-4 sm:p-8 relative">

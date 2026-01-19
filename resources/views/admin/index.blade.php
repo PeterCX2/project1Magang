@@ -20,8 +20,8 @@
         @foreach ($films as $film)
             <tr>
                 <td class="px-6 py-4 whitespace-nowrap">{{ $film->title }}</td>
-                <td class="px-6 py-4 whitespace-nowrap">{{ $film->link }}</td>
-                <td class="px-6 py-4 whitespace-nowrap">{{ $film->category->name }}</td>
+                <td class="px-6 py-4 whitespace-nowrap"><p class="w-[200px] truncate">{{ $film->link }}</p></td>
+                <td class="px-6 py-4 whitespace-nowrap">{{ $film->category->name ?? 'None' }}</td>
                 <td class="px-6 py-4 whitespace-nowrap">{{ $film->publisher }}</td>
                 <td class="px-6 py-4 whitespace-nowrap">{{ $film->release_date }}</td>
                 <td class="px-6 py-4 whitespace-nowrap">
