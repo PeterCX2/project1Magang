@@ -6,6 +6,7 @@ use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Models\Film;
 
+
 class FilmController extends Controller
 {
     public function userIndex(){
@@ -32,7 +33,7 @@ class FilmController extends Controller
             'publisher' => 'required|string|max:255',
             'release_date' => 'required|date',
         ]);
-        Film::create($request->all());
+        $film = Film::create($request->all());
 
         return redirect()->route('admin.index')->with('success', 'Film created successfully.');
     }
