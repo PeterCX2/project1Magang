@@ -6,17 +6,17 @@
 
   <form class="grid grid-cols-1 gap-6" method="post" action="{{ route('admin.update', $film->id) }}">
     @csrf
+    @method('PUT')
     <!-- Title -->
     <div class="p-2">
         <label for="link">Video Link</label>
         <input value="{{ $film->link }}" placeholder="..." type="text" id="link" name="link" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-[#8c0327] focus:ring-[#8c0327] focus:ring-opacity-50 p-2 border-2" style="background-color: #f6f6f6;">
     </div>
     <div class="p-2">
-        <label for="category_id">Video Link</label>
-        <select name="category_id" id="category_id" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-[#8c0327] focus:ring-[#8c0327] focus:ring-opacity-50 p-2 border-2 text-gray-400" style="background-color: #f6f6f6;" onchange="this.classList.remove('text-gray-400')">
-            <option value="" disabled selected hidden>Select Category</option>
+        <label for="category_id">Video Category</label>
+        <select name="category_id" id="category_id" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-[#8c0327] focus:ring-[#8c0327] focus:ring-opacity-50 p-2 border-2" style="background-color: #f6f6f6;">
             @foreach ($categories as $category)
-                <option value="{{ $category->id }}">{{ $category->name }}</option>
+                <option value="{{ $category->id }}" {{ $film->category_id === $category->id ? 'selected' : '' }}>{{ $category->name }}</option>
             @endforeach
         </select>
     </div>
