@@ -4,52 +4,81 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
-use App\Models\Role;
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
+use Illuminate\Support\Facades\Hash;
+
 
 class UserController extends Controller
 {
     public function index(){
-        $users = User::paginate(8);
+        $users = User::with('roles', 'permissions')->paginate(8);
         return view('admin.users', compact('users'));
     }
 
     public function create(){
         $roles = Role::get();
-        return view('admin.createUser', compact('roles'));
+        $permissions = Permission::get();
+        return view('admin.createUser', compact('roles', 'permissions'));
     }
     
     public function edit($id){
         $user = User::findOrFail($id);
         $roles = Role::get();
-        return view('admin.editUser', compact('user', 'roles'));
+        $permissions = Permission::get();
+        return view('admin.editUser', compact('user', 'roles', 'permissions'));
     }
 
-    public function store(Request $request){
-        $request->validate([
+
+    public function store(Request $request)
+    {
+        $data = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users,email',
-            'role' => 'required|string|max:255',
+            'roles' => 'required|array',
+            'roles.*' => 'exists:roles,name',
+            'permissions' => 'nullable|array',
+            'permissions.*' => 'exists:permissions,name',
             'password' => 'required|string|min:8|confirmed',
-            'password_confirmation' => 'required|string|min:8|same:password'
         ]);
 
-        User::create($request->all());
+        $user = User::create([
+            'name' => $data['name'],
+            'email' => $data['email'],
+            'password' => Hash::make($data['password']),
+        ]);
 
-        return redirect()->route('admin.users')->with('success', 'User created successfully.');
+        $roles = $data['roles'];
+        $user->syncRoles($roles);
+
+        if ($request->filled('permissions') && !in_array('admin', $roles)) {
+            $user->givePermissionTo($data['permissions']);
+        }
+
+        return redirect()
+            ->route('admin.users')
+            ->with('success', 'User created successfully.');
     }
+
 
 
     public function update(Request $request, $id){
-        $request->validate([
+        $data = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users,email,' . $id,
-            'role' => 'required|string|max:255',
-            'password' => 'required|string|min:8|confirmed',
-            'password_confirmation' => 'required|string|min:8|same:password'
+            'roles' => 'required|array',
+            'roles.*' => 'exists:roles,name',
         ]);
 
         $user = User::findOrFail($id);
-        $user->update($request->all());
+        $user->update($data);
+
+        $roles = $data['roles'];
+        $user->syncRoles($roles);
+
+        if ($request->filled('password')) {
+            $data['password'] = 'required|string|min:8|confirmed';
+        }
 
         return redirect()->route('admin.users')->with('success', 'User updated successfully.');
     }
