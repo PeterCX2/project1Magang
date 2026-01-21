@@ -28,14 +28,6 @@ return Application::configure(basePath: dirname(__DIR__))
             UnauthorizedException $e,
             Request $request
         ) {
-            $user = $request->user();
-
-            if ($user?->hasRole('admin')) {
-                return redirect()
-                    ->route('noAccess')
-                    ->with('error', 'You are not authorized to access that page.');
-            }
-
             return redirect()
                 ->route('noAccess')
                 ->with('error', 'You are not authorized to access that page.');

@@ -14,7 +14,7 @@ Route::post('/register', [Controllers\AuthController::class, 'register'])->name(
 Route::post('/logout', [Controllers\AuthController::class, 'logout'])->name('logout')->middleware(['auth']);
 Route::get('/dashboard', [Controllers\RedirectController::class, 'index'])->name('dashboard')->middleware(['auth']);
 
-Route::get('user/index', [Controllers\FilmController::class, 'userIndex'])->name('user.index')->middleware(['auth', 'role:user', 'role:film creator']);
+Route::get('user/index', [Controllers\FilmController::class, 'userIndex'])->name('user.index')->middleware(['auth', 'role:user|film creator']);
 Route::get('admin/index', [Controllers\FilmController::class, 'adminIndex'])->name('admin.index')->middleware(['auth', 'permission:view film']);
 Route::get('admin/category', [Controllers\CategoryController::class, 'index'])->name('admin.category')->middleware(['auth', 'permission:view category']);
 Route::get('admin/users', [Controllers\UserController::class, 'index'])->name('admin.users')->middleware(['auth', 'permission:view user']);
