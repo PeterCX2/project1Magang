@@ -14,20 +14,24 @@ Route::post('/register', [Controllers\AuthController::class, 'register'])->name(
 Route::post('/logout', [Controllers\AuthController::class, 'logout'])->name('logout')->middleware(['auth']);
 Route::get('/dashboard', [Controllers\RedirectController::class, 'index'])->name('dashboard')->middleware(['auth']);
 
-Route::get('user/index', [Controllers\FilmController::class, 'userIndex'])->name('user.index')->middleware(['auth', 'user']);
-Route::get('admin/index', [Controllers\FilmController::class, 'adminIndex'])->name('admin.index')->middleware(['auth', 'admin']);
-Route::get('admin/category', [Controllers\CategoryController::class, 'index'])->name('admin.category')->middleware(['auth', 'admin']);
-Route::get('admin/users', [Controllers\UserController::class, 'index'])->name('admin.users')->middleware(['auth', 'admin']);
-Route::get('admin/create', [Controllers\FilmController::class, 'create'])->name('admin.create')->middleware(['auth', 'admin']);
-Route::post('admin/store', [Controllers\FilmController::class, 'store'])->name('admin.store')->middleware(['auth', 'admin']);
-Route::get('admin/edit/{id}', [Controllers\FilmController::class, 'edit'])->name('admin.edit')->middleware(['auth', 'admin']);
-Route::put('admin/update/{id}', [Controllers\FilmController::class, 'update'])->name('admin.update')->middleware(['auth', 'admin']);
-Route::get('admin/delete/{id}', [Controllers\FilmController::class, 'delete'])->name('admin.delete')->middleware(['auth', 'admin']);
-Route::get('admin/deleteCategory/{id}', [Controllers\CategoryController::class, 'delete'])->name('admin.deleteCategory')->middleware(['auth', 'admin']);
-Route::get('admin/createCategory', [Controllers\CategoryController::class, 'create'])->name('admin.createCategory')->middleware(['auth', 'admin']);
-Route::post('admin/storeCategory', [Controllers\CategoryController::class, 'store'])->name('admin.storeCategory')->middleware(['auth', 'admin']);
-Route::get('admin/deleteUser/{id}', [Controllers\UserController::class, 'delete'])->name('admin.deleteUser')->middleware(['auth', 'admin']);
-Route::get('admin/createUser', [Controllers\UserController::class, 'create'])->name('admin.createUser')->middleware(['auth', 'admin']);
-Route::post('admin/storeUser', [Controllers\UserController::class, 'store'])->name('admin.storeUser')->middleware(['auth', 'admin']);
-Route::get('admin/editUser/{id}', [Controllers\UserController::class, 'edit'])->name('admin.editUser')->middleware(['auth', 'admin']);
-Route::put('admin/editUser/{id}', [Controllers\UserController::class, 'update'])->name('admin.updateUser')->middleware(['auth', 'admin']);
+Route::get('user/index', [Controllers\FilmController::class, 'userIndex'])->name('user.index')->middleware(['auth', 'role:user', 'role:film creator']);
+Route::get('admin/index', [Controllers\FilmController::class, 'adminIndex'])->name('admin.index')->middleware(['auth', 'permission:view film']);
+Route::get('admin/category', [Controllers\CategoryController::class, 'index'])->name('admin.category')->middleware(['auth', 'permission:view category']);
+Route::get('admin/users', [Controllers\UserController::class, 'index'])->name('admin.users')->middleware(['auth', 'permission:view user']);
+Route::get('admin/create', [Controllers\FilmController::class, 'create'])->name('admin.create')->middleware(['auth', 'permission:create film']);
+Route::post('admin/store', [Controllers\FilmController::class, 'store'])->name('admin.store')->middleware(['auth', 'permission:create film']);
+Route::get('admin/edit/{id}', [Controllers\FilmController::class, 'edit'])->name('admin.edit')->middleware(['auth', 'permission:edit film']);
+Route::put('admin/update/{id}', [Controllers\FilmController::class, 'update'])->name('admin.update')->middleware(['auth', 'permission:edit film']);
+Route::get('admin/delete/{id}', [Controllers\FilmController::class, 'delete'])->name('admin.delete')->middleware(['auth', 'permission:delete film']);
+Route::get('admin/deleteCategory/{id}', [Controllers\CategoryController::class, 'delete'])->name('admin.deleteCategory')->middleware(['auth', 'permission:delete category']);
+Route::get('admin/createCategory', [Controllers\CategoryController::class, 'create'])->name('admin.createCategory')->middleware(['auth', 'permission:create category']);
+Route::post('admin/storeCategory', [Controllers\CategoryController::class, 'store'])->name('admin.storeCategory')->middleware(['auth', 'permission:create category']);
+Route::get('admin/deleteUser/{id}', [Controllers\UserController::class, 'delete'])->name('admin.deleteUser')->middleware(['auth', 'role:admin']);
+Route::get('admin/createUser', [Controllers\UserController::class, 'create'])->name('admin.createUser')->middleware(['auth', 'role:admin']);
+Route::post('admin/storeUser', [Controllers\UserController::class, 'store'])->name('admin.storeUser')->middleware(['auth', 'role:admin']);
+Route::get('admin/editUser/{id}', [Controllers\UserController::class, 'edit'])->name('admin.editUser')->middleware(['auth', 'role:admin']);
+Route::put('admin/editUser/{id}', [Controllers\UserController::class, 'update'])->name('admin.updateUser')->middleware(['auth', 'role:admin']);
+
+Route::get('/no-access', function () {
+    return view('errors.noAccess');
+})->name('noAccess');
