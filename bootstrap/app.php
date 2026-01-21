@@ -3,6 +3,11 @@
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
+use Spatie\Permission\Middleware\RoleMiddleware;
+use Spatie\Permission\Middleware\PermissionMiddleware;
+use Spatie\Permission\Middleware\RoleOrPermissionMiddleware;
+use Illuminate\Http\Request;
+use Spatie\Permission\Exceptions\UnauthorizedException;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -13,10 +18,26 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->alias([
-            'user' => \App\Http\Middleware\UserMiddleware::class,
-            'admin' => \App\Http\Middleware\AdminMiddleware::class,
+            'role' => RoleMiddleware::class,
+            'permission' => PermissionMiddleware::class,
+            'role_or_permission' => RoleOrPermissionMiddleware::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
-        //
+        $exceptions->render(function (
+            UnauthorizedException $e,
+            Request $request
+        ) {
+            $user = $request->user();
+
+            if ($user?->hasRole('admin')) {
+                return redirect()
+                    ->route('noAccess')
+                    ->with('error', 'You are not authorized to access that page.');
+            }
+
+            return redirect()
+                ->route('noAccess')
+                ->with('error', 'You are not authorized to access that page.');
+        });
     })->create();
