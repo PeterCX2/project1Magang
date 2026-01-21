@@ -23,12 +23,32 @@
 
     <!-- Role -->
     <div class="p-2">
-        <label for="role">Role</label>
-        <select name="role" id="role" class="block w-full rounded-md border-gray-300 shadow-sm p-2 border-2" style="background-color: #f6f6f6;">
+        <label for="roles" class="font-semibold">Roles</label>
+        <select name="roles[]" id="roles" multiple class="block w-full rounded-md border-gray-300 shadow-sm p-2 border-2" style="background-color: #f6f6f6;">
             @foreach ($roles as $role)
-                <option value="{{ $role->id }}" {{ $user->role_id === $role->id ? 'selected' : '' }}>{{ $role->name }}</option>
+                <option value="{{ $role->name }}" data-name="{{ $role->name }}" {{ in_array($role->name, old('roles', $user->getRoleNames()->toArray())) ? 'selected' : '' }}>
+                    {{ $role->name }}
+                </option>
             @endforeach
         </select>
+    </div>
+
+    <label class="font-semibold">Permissions</label>
+    <div class="grid grid-flow-col grid-rows-4 gap-x-12 gap-y-2 bg-gray-100 p-5 rounded-xl">
+    @foreach ($permissions as $permission)
+        @php
+            $group =
+                str_contains($permission->name, 'user') ? 'user' :
+                (str_contains($permission->name, 'create') ? 'create' :
+                (str_contains($permission->name, 'edit') ? 'edit' :
+                (str_contains($permission->name, 'delete') ? 'delete' : 'other')));
+        @endphp
+
+        <label class="flex items-center space-x-2 whitespace-nowrap permission-item" data-group="{{ $group }}">
+            <input type="checkbox" name="permissions[]" value="{{ $permission->name }}" {{ $user->hasPermissionTo($permission->name) ? 'checked' : '' }} >
+            <span>{{ $permission->name }}</span>
+        </label>
+    @endforeach
     </div>
 
     <!-- Password (optional) -->
@@ -51,4 +71,42 @@
     </div>
   </form>
 </div>
+<script>
+$(document).ready(function () {
+    $('#roles').select2({placeholder:"Pilih roles",allowClear:true,width:'100%'});
+    function togglePermissions() {
+        // ambil semua role yang dipilih
+        let roles = $('#roles').val() || []; // array
+
+        if (roles.includes('admin')) {
+            $('.permission-item').removeClass('hidden');
+            return; // stop di sini
+        }
+
+        $('.permission-item').each(function () {
+            let group = $(this).data('group');
+
+            // contoh rule:
+            // user tidak boleh create, edit, delete film, akun, dan category
+            // film creator tidak boleh akses akun
+            if (roles.includes('film creator') && group === 'user') {
+                $(this).addClass('hidden');
+                $(this).find('input').prop('checked', false);
+            } 
+
+            if (roles.includes('user') && !roles.includes('film creator') && (group === 'user' || group === 'create' || group === 'edit' || group === 'delete')) {
+                $(this).addClass('hidden');
+                $(this).find('input').prop('checked', false);
+            }
+        });
+    }
+
+    // event change
+    $('#roles').on('change', togglePermissions);
+
+    // run on load (old input / edit)
+    togglePermissions();
+});
+</script>
+
 @endsection

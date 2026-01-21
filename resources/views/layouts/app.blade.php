@@ -5,8 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', default: 'VIDYEA')</title>
     <script src="https://cdn.tailwindcss.com"></script>
-
-    <script>
+	<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>    <script>
         tailwind.config = {
             theme: {
                 extend: {
@@ -81,13 +82,20 @@
 			</p>
 		</div>
 
-        @if(Auth::user()->role == 'admin')
-            <div>
-                <a href="{{ route('admin.index') }}" class="px-4 py-2 font-medium text-white bg-purple-600 rounded-md hover:bg-purple-500 focus:outline-none focus:shadow-outline-purple active:bg-purple-600 transition duration-150 ease-in-out">Films</a>
-                <a href="{{ route('admin.category') }}" class="px-4 py-2 font-medium text-white bg-purple-600 rounded-md hover:bg-purple-500 focus:outline-none focus:shadow-outline-purple active:bg-purple-600 transition duration-150 ease-in-out">Categories</a>
+		<div>
+			@if(Auth::user()->hasRole('user') || Auth::user()->hasRole('film creator'))
+				<a href="{{ route('user.index') }}" class="px-4 py-2 font-medium text-white bg-purple-600 rounded-md hover:bg-purple-500 focus:outline-none focus:shadow-outline-purple active:bg-purple-600 transition duration-150 ease-in-out">Films User</a>
+			@endif
+			@if(Auth::user()->hasPermissionTo('view film'))
+				<a href="{{ route('admin.index') }}" class="px-4 py-2 font-medium text-white bg-purple-600 rounded-md hover:bg-purple-500 focus:outline-none focus:shadow-outline-purple active:bg-purple-600 transition duration-150 ease-in-out">Films</a>
+			@endif
+			@if (Auth::user()->hasPermissionTo('view category'))
+				<a href="{{ route('admin.category') }}" class="px-4 py-2 font-medium text-white bg-purple-600 rounded-md hover:bg-purple-500 focus:outline-none focus:shadow-outline-purple active:bg-purple-600 transition duration-150 ease-in-out">Categories</a>
+			@endif
+			@if (Auth::user()->hasPermissionTo('view user'))
 				<a href="{{ route('admin.users') }}" class="px-4 py-2 font-medium text-white bg-purple-600 rounded-md hover:bg-purple-500 focus:outline-none focus:shadow-outline-purple active:bg-purple-600 transition duration-150 ease-in-out">Users</a>
-            </div>
-        @endif
+			@endif
+        </div>
 
 		<!-- RIGHT: PROFILE DROPDOWN -->
 		<div class="relative">

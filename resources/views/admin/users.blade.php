@@ -25,7 +25,7 @@
             <tr>
                 <td class="px-6 py-4 whitespace-nowrap">{{ $user->name }}</td>
                 <td class="px-6 py-4 whitespace-nowrap">{{ $user->email }}</td>
-                <td class="px-6 py-4 whitespace-nowrap">{{ $user->role ?? 'No role' }}</td>
+                <td class="px-6 py-4 whitespace-nowrap">{{ $user->getRoleNames()->implode(', ') }}</td>
                 <td class="px-6 py-4 whitespace-nowrap">{{ $user->created_at->format('d M Y') }}</td>
                 <td class="px-6 py-4 whitespace-nowrap">
                     <a href="{{ route('admin.editUser', $user->id) }}" class="px-3 py-2 text-white bg-blue-600 rounded hover:bg-blue-500">Edit</a>
