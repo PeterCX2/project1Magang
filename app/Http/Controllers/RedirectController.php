@@ -10,12 +10,14 @@ class RedirectController extends Controller
     {
         $user = auth()->user();
 
-        if ($user->role === 'admin') {
+        if ($user->hasRole('admin')) {
             return redirect()->route('admin.index');
-        } elseif ($user->role === 'user') {
-            return redirect()->route('user.index');
-        } else {
-            return abort(403, 'Role tidak dikenali.');
         }
+
+        if ($user->hasRole('user')) {
+            return redirect()->route('user.index');
+        }
+
+        abort(403, 'Role tidak dikenali.');
     }
 }
