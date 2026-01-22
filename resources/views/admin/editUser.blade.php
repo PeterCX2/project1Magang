@@ -33,7 +33,14 @@
         </select>
     </div>
 
-    <label class="font-semibold">Permissions</label>
+    <div class="p-2">
+        <label class="font-semibold">Allowed Permissions</label>
+        <div id="permissionInfo" class="mt-2 bg-gray-100 p-4 rounded-lg text-sm text-gray-700">
+            <em>Select a role to see allowed permissions</em>
+        </div>
+    </div>
+
+    {{-- <label class="font-semibold">Permissions</label>
     <div class="grid grid-flow-col grid-rows-4 gap-x-12 gap-y-2 bg-gray-100 p-5 rounded-xl">
     @foreach ($permissions as $permission)
         @php
@@ -49,7 +56,7 @@
             <span>{{ $permission->name }}</span>
         </label>
     @endforeach
-    </div>
+    </div> --}}
 
     <!-- Password (optional) -->
     <div class="p-2">
@@ -74,38 +81,70 @@
 <script>
 $(document).ready(function () {
     $('#roles').select2({placeholder:"Pilih roles",allowClear:true,width:'100%'});
-    function togglePermissions() {
-        // ambil semua role yang dipilih
-        let roles = $('#roles').val() || []; // array
 
-        if (roles.includes('admin')) {
-            $('.permission-item').removeClass('hidden');
-            return; // stop di sini
+    const rolesData = @json($roles->mapWithKeys(fn($r) => [
+            $r->name => $r->permissions->pluck('name')
+        ])
+    );
+
+    function updatePermissions() {
+        let selectedRoles = $('#roles').val() || [];
+        let permissions = new Set();
+
+        selectedRoles.forEach(role => {
+            (rolesData[role] || []).forEach(p => permissions.add(p));
+        });
+
+        if (permissions.size === 0) {
+            $('#permissionInfo').html('<em>Select a role to see allowed permissions</em>');
+            return;
         }
 
-        $('.permission-item').each(function () {
-            let group = $(this).data('group');
-
-            // contoh rule:
-            // user tidak boleh create, edit, delete film, akun, dan category
-            // film creator tidak boleh akses akun
-            if (roles.includes('film creator') && group === 'user') {
-                $(this).addClass('hidden');
-                $(this).find('input').prop('checked', false);
-            } 
-
-            if (roles.includes('user') && !roles.includes('film creator') && (group === 'user' || group === 'create' || group === 'edit' || group === 'delete')) {
-                $(this).addClass('hidden');
-                $(this).find('input').prop('checked', false);
-            }
+        let html = '<ul class="list-disc list-inside space-y-1">';
+        permissions.forEach(p => {
+            html += `<li>${p}</li>`;
         });
+        html += '</ul>';
+
+        $('#permissionInfo').html(html);
     }
 
-    // event change
-    $('#roles').on('change', togglePermissions);
+    $('#roles').on('change', updatePermissions);
 
-    // run on load (old input / edit)
-    togglePermissions();
+    updatePermissions();
+
+    // function togglePermissions() {
+    //     // ambil semua role yang dipilih
+    //     let roles = $('#roles').val() || []; // array
+
+    //     if (roles.includes('admin')) {
+    //         $('.permission-item').removeClass('hidden');
+    //         return; // stop di sini
+    //     }
+
+    //     $('.permission-item').each(function () {
+    //         let group = $(this).data('group');
+
+    //         // contoh rule:
+    //         // user tidak boleh create, edit, delete film, akun, dan category
+    //         // film creator tidak boleh akses akun
+    //         if (roles.includes('film creator') && group === 'user') {
+    //             $(this).addClass('hidden');
+    //             $(this).find('input').prop('checked', false);
+    //         } 
+
+    //         if (roles.includes('user') && !roles.includes('film creator') && (group === 'user' || group === 'create' || group === 'edit' || group === 'delete')) {
+    //             $(this).addClass('hidden');
+    //             $(this).find('input').prop('checked', false);
+    //         }
+    //     });
+    // }
+
+    // // event change
+    // $('#roles').on('change', togglePermissions);
+
+    // // run on load (old input / edit)
+    // togglePermissions();
 });
 </script>
 
