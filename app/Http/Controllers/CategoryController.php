@@ -8,7 +8,7 @@ use App\Models\Category;
 class CategoryController extends Controller
 {
     public function index(){
-        $categories = Category::with('films')->paginate(8);
+        $categories = Category::with('films')->paginate(7);
         return view('admin.category', compact('categories'));
     }
 

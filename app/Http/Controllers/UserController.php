@@ -12,19 +12,19 @@ use Illuminate\Support\Facades\Hash;
 class UserController extends Controller
 {
     public function index(){
-        $users = User::with('roles', 'permissions')->paginate(8);
+        $users = User::with('roles', 'permissions')->paginate(7);
         return view('admin.users', compact('users'));
     }
 
     public function create(){
-        $roles = Role::get();
+        $roles = Role::with('permissions')->get();
         $permissions = Permission::get();
         return view('admin.createUser', compact('roles', 'permissions'));
     }
     
     public function edit($id){
         $user = User::findOrFail($id);
-        $roles = Role::get();
+        $roles = Role::with('permissions')->get();
         $permissions = Permission::get();
         return view('admin.editUser', compact('user', 'roles', 'permissions'));
     }

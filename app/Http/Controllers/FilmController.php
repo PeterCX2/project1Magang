@@ -15,7 +15,7 @@ class FilmController extends Controller
     }
 
     public function adminIndex(){
-        $films = Film::with('category')->paginate(8);
+        $films = Film::with('category')->paginate(7);
         return view('admin.index', compact('films'));
     }
 

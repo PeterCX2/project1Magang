@@ -16,9 +16,12 @@ class RolePermissionSeeder extends Seeder
     {
         $admin = Role::create(['name' => 'admin']);
         $user  = Role::create(['name' => 'user']);
-        $filmCreator = Role::create(['name' => 'film creator']);
 
         $permission = [
+            Permission::create(['name' => 'view role']),
+            Permission::create(['name' => 'create role']),
+            Permission::create(['name' => 'edit role']),
+            Permission::create(['name' => 'delete role']),
             Permission::create(['name' => 'view user']),
             Permission::create(['name' => 'create user']),
             Permission::create(['name' => 'edit user']),
@@ -33,12 +36,5 @@ class RolePermissionSeeder extends Seeder
         ];
 
         $admin->givePermissionTo($permission);
-        $filmCreator->givePermissionTo([
-            'view film',
-            'create film',
-            'edit film',
-            'delete film',
-            'view category',
-        ]);
     }
 }
