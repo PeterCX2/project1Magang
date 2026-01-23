@@ -14,6 +14,7 @@ class RolePermissionSeeder extends Seeder
      */
     public function run(): void
     {
+        $superAdmin = Role::create(['name' => 'super-admin']);
         $admin = Role::create(['name' => 'admin']);
         $user  = Role::create(['name' => 'user']);
 
@@ -30,11 +31,14 @@ class RolePermissionSeeder extends Seeder
             Permission::create(['name' => 'edit film']),
             Permission::create(['name' => 'create film']),
             Permission::create(['name' => 'delete film']),
+            Permission::create(['name' => 'view home']),
             Permission::create(['name' => 'view category']),
             Permission::create(['name' => 'create category']),
             Permission::create(['name' => 'delete category']),
+            Permission::create(['name' => 'view audit']),
+            Permission::create(['name' => 'delete audit']),
         ];
 
-        $admin->givePermissionTo($permission);
+        $superAdmin->givePermissionTo($permission);
     }
 }
