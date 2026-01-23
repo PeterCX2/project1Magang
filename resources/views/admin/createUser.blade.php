@@ -11,13 +11,13 @@
     <!-- Name -->
     <div class="p-2">
         <label for="name">Name</label>
-        <input value="{{ old('name') }}" type="text" id="name" name="name" required class="block w-full rounded-md border-gray-300 shadow-sm p-2 border-2" style="background-color: #f6f6f6;">
+        <input placeholder="User's name" value="{{ old('name') }}" type="text" id="name" name="name" required class="block w-full rounded-md border-gray-300 shadow-sm p-2 border-2" style="background-color: #f6f6f6;">
     </div>
 
     <!-- Email -->
     <div class="p-2">
         <label for="email">Email</label>
-        <input value="{{ old('email') }}" type="email" id="email" name="email" required class="block w-full rounded-md border-gray-300 shadow-sm p-2 border-2" style="background-color: #f6f6f6;">
+        <input placeholder="User's email" value="{{ old('email') }}" type="email" id="email" name="email" required class="block w-full rounded-md border-gray-300 shadow-sm p-2 border-2" style="background-color: #f6f6f6;">
     </div>
 
     <!-- Roles -->
@@ -60,13 +60,13 @@
     <!-- Password -->
     <div class="p-2">
         <label for="password">Password</label>
-        <input type="password" id="password" name="password" required class="block w-full rounded-md border-gray-300 shadow-sm p-2 border-2" style="background-color: #f6f6f6;">
+        <input placeholder="User's password" type="password" id="password" name="password" required class="block w-full rounded-md border-gray-300 shadow-sm p-2 border-2" style="background-color: #f6f6f6;">
     </div>
 
     <!-- Confirm Password -->
     <div class="p-2">
         <label for="password_confirmation">Confirm Password</label>
-        <input type="password" id="password_confirmation" name="password_confirmation" required class="block w-full rounded-md border-gray-300 shadow-sm p-2 border-2" style="background-color: #f6f6f6;">
+        <input placeholder="Enter user's password again" type="password" id="password_confirmation" name="password_confirmation" required class="block w-full rounded-md border-gray-300 shadow-sm p-2 border-2" style="background-color: #f6f6f6;">
     </div>
 
     <!-- Submit -->
@@ -77,7 +77,7 @@
 </div>
 <script>
 $(document).ready(function () {
-    $('#roles').select2({placeholder:"Pilih roles",allowClear:true,width:'100%'});
+    $('#roles').select2({placeholder:"Select roles",allowClear:true,width:'100%'});
     
     const rolesData = @json(
         $roles->mapWithKeys(fn($r) => [

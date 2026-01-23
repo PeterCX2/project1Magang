@@ -8,7 +8,7 @@
     @csrf
     <div class="p-2">
         <label for="name">Category Name</label>
-        <input placeholder="..." type="text" id="name" name="name" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-[#8c0327] focus:ring-[#8c0327] focus:ring-opacity-50 p-2 border-2" style="background-color: #f6f6f6;">
+        <input placeholder="e.g. horror" type="text" id="name" name="name" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-[#8c0327] focus:ring-[#8c0327] focus:ring-opacity-50 p-2 border-2" style="background-color: #f6f6f6;">
     </div>
 
     <div class="col-span-full mt-6 p-2">

@@ -9,7 +9,7 @@
     <!-- Title -->
     <div class="p-2">
         <label for="link">Video Link</label>
-        <input placeholder="..." type="text" id="link" name="link" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-[#8c0327] focus:ring-[#8c0327] focus:ring-opacity-50 p-2 border-2" style="background-color: #f6f6f6;">
+        <input placeholder="e.g. https://example.com" type="text" id="link" name="link" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-[#8c0327] focus:ring-[#8c0327] focus:ring-opacity-50 p-2 border-2" style="background-color: #f6f6f6;">
     </div>
     <div class="p-2">
         <label for="category_id">Video category</label>
@@ -22,15 +22,15 @@
     </div>
     <div class="p-2">
         <label for="title">Video Title</label>
-        <input placeholder="..." type="text" id="title" name="title" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-[#8c0327] focus:ring-[#8c0327] focus:ring-opacity-50 p-2 border-2" style="background-color: #f6f6f6;">
+        <input placeholder="Enter title" type="text" id="title" name="title" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-[#8c0327] focus:ring-[#8c0327] focus:ring-opacity-50 p-2 border-2" style="background-color: #f6f6f6;">
     </div>
     <div class="p-2">
         <label for="description">Video Description</label>
-        <input placeholder="..." type="text" id="description" name="description" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-[#8c0327] focus:ring-[#8c0327] focus:ring-opacity-50 p-2 border-2" style="background-color: #f6f6f6;">
+        <input placeholder="Write a brief description" type="text" id="description" name="description" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-[#8c0327] focus:ring-[#8c0327] focus:ring-opacity-50 p-2 border-2" style="background-color: #f6f6f6;">
     </div>
     <div class="p-2">
         <label for="publisher">Publisher</label>
-        <input placeholder="..." type="text" id="publisher" name="publisher" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-[#8c0327] focus:ring-[#8c0327] focus:ring-opacity-50 p-2 border-2" style="background-color: #f6f6f6;">
+        <input placeholder="Publisher name" type="text" id="publisher" name="publisher" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-[#8c0327] focus:ring-[#8c0327] focus:ring-opacity-50 p-2 border-2" style="background-color: #f6f6f6;">
     </div>
     <div class="p-2">
         <label for="release_date">Release Date</label>

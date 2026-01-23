@@ -11,7 +11,7 @@
     <!-- Name -->
     <div class="p-2">
         <label for="name">Name</label>
-        <input value="{{ old('name') }}" type="text" id="name" name="name" required class="block w-full rounded-md border-gray-300 shadow-sm p-2 border-2" style="background-color: #f6f6f6;">
+        <input placeholder="e.g. content creator" value="{{ old('name') }}" type="text" id="name" name="name" required class="block w-full rounded-md border-gray-300 shadow-sm p-2 border-2" style="background-color: #f6f6f6;">
     </div>
 
     <label class="font-semibold">Permissions</label>
