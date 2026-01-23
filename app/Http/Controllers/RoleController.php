@@ -45,6 +45,7 @@ class RoleController extends Controller
         // AUDIT CREATE ROLE
         Audit::create([
             'user_id' => auth()->user()->id,
+            'user_type' => get_class(auth()->user()),
             'event' => 'role_created',
             'auditable_type' => Role::class,
             'auditable_id' => $role->id,
@@ -91,6 +92,7 @@ class RoleController extends Controller
 
         Audit::create([
             'user_id' => auth()->user()->id,
+            'user_type' => get_class(auth()->user()),
             'event' => 'updated',
             'auditable_type' => Role::class,
             'auditable_id' => $role->id,
