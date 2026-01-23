@@ -29,9 +29,7 @@ class UserController extends Controller
         return view('admin.editUser', compact('user', 'roles', 'permissions'));
     }
 
-
-    public function store(Request $request)
-    {
+    public function store(Request $request){
         $data = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users,email',
@@ -59,8 +57,6 @@ class UserController extends Controller
             ->route('admin.users')
             ->with('success', 'User created successfully.');
     }
-
-
 
     public function update(Request $request, $id){
         $data = $request->validate([
