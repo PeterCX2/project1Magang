@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
-
+use OwenIt\Auditing\Models\Audit;
 
 class RoleController extends Controller
 {
@@ -32,11 +32,31 @@ class RoleController extends Controller
             'permissions.*' => 'exists:permissions,name',
         ]);
 
-        $role = Role::create(['name' => $data['name']]);
+        // CREATE ROLE
+        $role = Role::create([
+            'name' => $data['name'],
+        ]);
 
+        // ASSIGN PERMISSIONS
         if ($request->filled('permissions')) {
             $role->givePermissionTo($data['permissions']);
         }
+
+        // AUDIT CREATE ROLE
+        Audit::create([
+            'user_id' => auth()->user()->id,
+            'event' => 'role_created',
+            'auditable_type' => Role::class,
+            'auditable_id' => $role->id,
+            'old_values' => null,
+            'new_values' => [
+                'name' => $role->name,
+                'permissions' => $role->permissions->pluck('name')->toArray(),
+            ],
+            'ip_address' => request()->ip(),
+            'user_agent' => request()->userAgent(),
+            'url' => request()->fullUrl(),
+        ]);
 
         return redirect()->route('admin.roles')->with('success', 'Role created successfully.');
     }
@@ -49,6 +69,12 @@ class RoleController extends Controller
         ]);
 
         $role = Role::findOrFail($id);
+
+        $oldData = [
+            'name' => $role->name,
+            'permissions' => $role->permissions->pluck('name')->toArray(),
+        ];
+
         $role->name = $data['name'];
         $role->save();
 
@@ -57,6 +83,23 @@ class RoleController extends Controller
         } else {
             $role->syncPermissions([]);
         }
+
+         $newData = [
+            'name' => $role->name,
+            'permissions' => $role->permissions->pluck('name')->toArray(),
+        ];
+
+        Audit::create([
+            'user_id' => auth()->user()->id,
+            'event' => 'updated',
+            'auditable_type' => Role::class,
+            'auditable_id' => $role->id,
+            'old_values' => $oldData,
+            'new_values' => $newData,
+            'ip_address' => request()->ip(),
+            'user_agent' => request()->userAgent(),
+            'url' => request()->fullUrl(),
+        ]);
 
         return redirect()->route('admin.roles')->with('success', 'Role updated successfully.');
     }
