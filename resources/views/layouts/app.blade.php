@@ -134,6 +134,14 @@
                     </span>
                 </a>
             @endif
+            @if (Auth::user()->hasPermissionTo('view audit'))
+                <a href="{{ route('admin.audits') }}" class="flex items-center px-4 py-2 hover:bg-gray-100">
+                    <img class="w-5 h-5 shrink-0" src="{{ asset('image/audit.png') }}" alt="Audit Icon">
+                    <span class="ml-3 sidebar-text">
+                        Audits
+                    </span>
+                </a>
+            @endif
         </nav>
     </aside>
 
