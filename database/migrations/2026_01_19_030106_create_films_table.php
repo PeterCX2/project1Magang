@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('publisher');
             $table->date('release_date');
             $table->timestamps();
+            $table->softDeletes('deleted_at', 0);
         });
     }
 
@@ -27,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('film');
+        Schema::dropIfExists('films');
     }
 };
