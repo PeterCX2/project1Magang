@@ -10,11 +10,11 @@ class RedirectController extends Controller
     {
         $user = auth()->user();
 
-        if ($user->hasRole('admin')) {
+        if ($user->hasPermissionTo('view film') || $user->hasPermissionTo('view user') || $user->hasPermissionTo('view category')) {
             return redirect()->route('admin.index');
         }
 
-        if ($user->hasRole('user')) {
+        if ($user->hasPermissionTo('view home')) {
             return redirect()->route('user.index');
         }
 
