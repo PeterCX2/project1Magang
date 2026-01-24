@@ -14,8 +14,6 @@
                     <th class="px-6 py-3 text-left tracking-wider">User</th>
                     <th class="px-6 py-3 text-left tracking-wider">Event</th>
                     <th class="px-6 py-3 text-left tracking-wider">Model</th>
-                    <th class="px-6 py-3 text-left tracking-wider">Old Values</th>
-                    <th class="px-6 py-3 text-left tracking-wider">New Values</th>
                     <th class="px-6 py-3 text-left tracking-wider">Date</th>
                     <th class="px-6 py-3 text-left tracking-wider">Action</th>
                 </tr>
@@ -26,11 +24,9 @@
                         <td class="px-6 py-4 whitespace-nowrap">{{ optional($audit->user)->name ?? 'System' }}</td>
                         <td class="px-6 py-4 whitespace-nowrap">{{ $audit->event }}</td>
                         <td class="px-6 py-4 whitespace-nowrap">{{ class_basename($audit->auditable_type) }}</td>
-                        <td class="px-6 py-4 text-xs"><pre>{{ json_encode($audit->old_values, JSON_PRETTY_PRINT) }}</pre></td>
-                        <td class="px-6 py-4 text-xs"><pre>{{ json_encode($audit->new_values, JSON_PRETTY_PRINT) }}</pre></td>
                         <td class="px-6 py-4 whitespace-nowrap">{{ $audit->created_at->format('d M Y H:i') }}</td>
                         <td class="px-6 py-4 whitespace-nowrap">
-                           <a href="{{ route('admin.deleteAudit', $audit->id) }}" class="ml-2 px-3 py-2 text-white bg-red-600 rounded hover:bg-red-500" onclick="return confirm('Are you sure?')">Delete</a>
+                            <a href="{{ route('admin.showAudit', $audit->id) }}" class="ml-2 px-3 py-2 text-white bg-blue-600 rounded hover:bg-blue-500">Show</a>
                         </td>
                     </tr>
                 @endforeach
