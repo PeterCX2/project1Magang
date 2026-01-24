@@ -1,5 +1,15 @@
 @extends('layouts.app')
 @section('content')
+@php
+$actions = ['view', 'create', 'edit', 'delete'];
+
+$resources = [];
+foreach ($permissions as $permission) {
+    [$action, $resource] = explode(' ', $permission->name, 2);
+    $resources[$resource][] = $action;
+}
+@endphp
+
 <div class="container mx-auto p-4">
   <!-- Page Title -->
   <h1 class="text-3xl font-bold text-black mb-6">Edit Role</h1>
@@ -15,13 +25,23 @@
     </div>
 
     <label class="font-semibold">Permissions</label>
-    <div class="grid grid-flow-col grid-rows-4 gap-x-12 gap-y-2 bg-gray-100 p-5 rounded-xl">
-    @foreach ($permissions as $permission)
-        <label class="flex items-center space-x-2 whitespace-nowrap permission-item">
-            <input type="checkbox" name="permissions[]" value="{{ $permission->name }}" {{ in_array($permission->name, old('permissions', $role->permissions->pluck('name')->toArray())) ? 'checked' : '' }}>
-            <span>{{ $permission->name }}</span>
-        </label>
-    @endforeach
+    <div class="grid grid-cols-4 gap-x-12 gap-y-2 bg-gray-100 p-5 rounded-xl">
+        @foreach ($resources as $resource => $resourceActions)
+            <div class="space-y-2">
+                <h3 class="text-xlt font-semibold capitalize text-gray-700">{{ $resource }}</h3>
+                @foreach ($actions as $action)
+                    @if(in_array($action, $resourceActions))
+                    <label class="flex items-center space-x-2 whitespace-nowrap">
+                        <input type="checkbox" 
+                               name="permissions[]" 
+                               value="{{ $action.' '.$resource }}"
+                               {{ in_array($action.' '.$resource, old('permissions', $role->permissions->pluck('name')->toArray())) ? 'checked' : '' }}>
+                        <span>{{ ucfirst($action) }}</span>
+                    </label>
+                    @endif
+                @endforeach
+            </div>
+        @endforeach
     </div>
 
     <!-- Submit -->

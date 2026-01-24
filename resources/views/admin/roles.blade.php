@@ -28,9 +28,31 @@
                 @foreach ($roles as $role)
                     <tr class="font-medium text-gray-500 opacity-90">
                         <td class="px-6 py-4 whitespace-nowrap">{{ $role->name }}</td>
-                        <td class="px-6 py-4 whitespace-wrap font-medium">{{ $role->permissions->pluck('name')->implode(', ') }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap font-medium">{{ $role->created_at->format('d M Y') }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap font-medium">
+                        <td class="px-6 py-4 text-sm whitespace-normal">
+                            @php
+                                $grouped = [];
+                                $order = ['view', 'create', 'edit', 'delete'];
+
+                                foreach ($role->permissions as $permission) {
+                                    [$action, $resource] = explode(' ', $permission->name, 2);
+
+                                    if ($resource) {
+                                        $grouped[$resource][] = $action;
+                                    }
+                                }
+                            @endphp
+                            @foreach ($grouped as $resource => $actions)
+                                <div>
+                                    <strong>{{ $resource }}</strong>
+                                    =
+                                    {{
+                                        collect($actions)->unique()->sortBy(fn ($a) => array_search($a, $order))->implode(', ')
+                                    }}
+                                </div>
+                            @endforeach
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">{{ $role->created_at->format('d M Y') }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap">
                             <a href="{{ route('admin.editRole', $role->id) }}" class="px-3 py-2 text-white bg-blue-600 rounded hover:bg-blue-500">Edit</a>
                             <a href="{{ route('admin.deleteRole', $role->id) }}" class="ml-2 px-3 py-2 text-white bg-red-600 rounded hover:bg-red-500" onclick="return confirm('Are you sure?')">Delete</a>
                         </td>

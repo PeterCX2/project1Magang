@@ -1,8 +1,17 @@
 @extends('layouts.app')
 
 @section('content')
+@php
+$actions = ['view', 'create', 'edit', 'delete'];
+
+$resources = [];
+foreach ($permissions as $permission) {
+    [$action, $resource] = explode(' ', $permission->name, 2);
+    $resources[$resource][] = $action;
+}
+@endphp
+
 <div class="container mx-auto p-4">
-  <!-- Page Title -->
   <h1 class="text-3xl font-bold text-black mb-6">Create Role</h1>
 
   <form class="grid grid-cols-1 gap-6" method="POST" action="{{ route('admin.storeRole') }}">
@@ -15,13 +24,21 @@
     </div>
 
     <label class="font-semibold">Permissions</label>
-    <div class="grid grid-flow-col grid-rows-4 gap-x-12 gap-y-2 bg-gray-100 p-5 rounded-xl">
-    @foreach ($permissions as $permission)
-        <label class="flex items-center space-x-2 whitespace-nowrap permission-item">
-            <input type="checkbox" name="permissions[]" value="{{ $permission->name }}">
-            <span>{{ $permission->name }}</span>
-        </label>
-    @endforeach
+    <div class="grid grid-cols-4 gap-x-12 gap-y-2 bg-gray-100 p-5 rounded-xl">
+        @foreach ($resources as $resource => $resourceActions)
+            <div class="space-y-2">
+                <h3 class="text-xlt font-semibold capitalize text-gray-700">{{ $resource }}</h3>
+
+                @foreach ($actions as $action)
+                    @if(in_array($action, $resourceActions))
+                    <label class="flex items-center space-x-2 whitespace-nowrap">
+                        <input type="checkbox" name="permissions[]" value="{{ $action.' '.$resource }}">
+                        <span>{{ ucfirst($action) }}</span>
+                    </label>
+                    @endif
+                @endforeach
+            </div>
+        @endforeach
     </div>
 
     <!-- Submit -->
