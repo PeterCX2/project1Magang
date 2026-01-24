@@ -46,7 +46,7 @@ class RoleController extends Controller
         Audit::create([
             'user_id' => auth()->user()->id,
             'user_type' => get_class(auth()->user()),
-            'event' => 'role_created',
+            'event' => 'Created',
             'auditable_type' => Role::class,
             'auditable_id' => $role->id,
             'old_values' => null,
@@ -93,7 +93,7 @@ class RoleController extends Controller
         Audit::create([
             'user_id' => auth()->user()->id,
             'user_type' => get_class(auth()->user()),
-            'event' => 'updated',
+            'event' => 'Updated',
             'auditable_type' => Role::class,
             'auditable_id' => $role->id,
             'old_values' => $oldData,

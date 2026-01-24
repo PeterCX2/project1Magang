@@ -39,6 +39,7 @@ Route::put('admin/updateRole/{id}', [Controllers\RoleController::class, 'update'
 Route::get('admin/deleteRole/{id}', [Controllers\RoleController::class, 'delete'])->name('admin.deleteRole')->middleware(['auth', 'permission:view role']);
 Route::get('admin/audits', [Controllers\AuditController::class, 'index'])->name('admin.audits')->middleware(['auth', 'role:super-admin|permission:view audit']);
 Route::get('admin/deleteAudit/{id}', [Controllers\AuditController::class, 'delete'])->name('admin.deleteAudit')->middleware(['auth', 'role:super-admin|permission:delete audit']);
+Route::get('admin/showAudit/{id}', [Controllers\AuditController::class, 'show'])->name('admin.showAudit')->middleware(['auth', 'role:super-admin|permission:view audit']);
 
 Route::get('/no-access', function () {
     return view('errors.noAccess');

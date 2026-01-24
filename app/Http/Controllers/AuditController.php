@@ -13,6 +13,13 @@ class AuditController extends Controller
         return view('admin.audits', compact('audits'));
     }
 
+    public function show($id){
+        $audit = Audit::with('user')->findOrFail($id);
+        $audit->old_values = $audit->old_values ?? [];
+        $audit->new_values = $audit->new_values ?? [];
+        return view('admin.showAudit', compact('audit'));
+    }
+
     public function delete($id){
         $audit = Audit::findOrFail($id);
         $audit->delete();
